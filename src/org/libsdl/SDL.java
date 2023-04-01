@@ -1,6 +1,6 @@
 package org.libsdl;
 
-import com.badlogic.gdx.jnigen.JniGenSharedLibraryLoader;
+import java.nio.file.Path;
 
 final public class SDL {
     /*JNI
@@ -9,8 +9,8 @@ final public class SDL {
 
     */
 
-    static {
-        new JniGenSharedLibraryLoader().load("sdl2gdx");
+    public static void load(Path libraryPath) {
+        System.load(libraryPath.toAbsolutePath().toString());
     }
 
     // joystick.h
@@ -345,65 +345,65 @@ final public class SDL {
        return (SDL_SetHint(name, value)==SDL_TRUE);
     */
 
-    public static int SDL_INIT_TIMER = SDL_INIT_TIMER();
+//    public static int SDL_INIT_TIMER = SDL_INIT_TIMER();
+//
+//    private static native int SDL_INIT_TIMER(); /*
+//        return SDL_INIT_TIMER;
+//    */
 
-    private static native int SDL_INIT_TIMER(); /*
-        return SDL_INIT_TIMER;
-    */
+//    public static int SDL_INIT_AUDIO = SDL_INIT_AUDIO();
+//
+//    private static native int SDL_INIT_AUDIO(); /*
+//        return SDL_INIT_AUDIO;
+//    */
 
-    public static int SDL_INIT_AUDIO = SDL_INIT_AUDIO();
-
-    private static native int SDL_INIT_AUDIO(); /*
-        return SDL_INIT_AUDIO;
-    */
-
-    public static int SDL_INIT_VIDEO = SDL_INIT_VIDEO();
-
-    private static native int SDL_INIT_VIDEO(); /*
-        return SDL_INIT_VIDEO;
-    */
-
-    public static int SDL_INIT_JOYSTICK = SDL_INIT_JOYSTICK();
-
-    private static native int SDL_INIT_JOYSTICK(); /*
-        return SDL_INIT_JOYSTICK;
-    */
-
-    public static int SDL_INIT_HAPTIC = SDL_INIT_HAPTIC();
-
-    private static native int SDL_INIT_HAPTIC(); /*
-        return SDL_INIT_HAPTIC;
-    */
-
-    public static int SDL_INIT_GAMECONTROLLER = SDL_INIT_GAMECONTROLLER();
-
-    private static native int SDL_INIT_GAMECONTROLLER(); /*
-        return SDL_INIT_GAMECONTROLLER;
-    */
-
-    public static int SDL_INIT_EVENTS = SDL_INIT_EVENTS();
-
-    private static native int SDL_INIT_EVENTS(); /*
-        return SDL_INIT_EVENTS;
-    */
-
-    public static int SDL_INIT_SENSOR = SDL_INIT_SENSOR();
-
-    private static native int SDL_INIT_SENSOR(); /*
-        return SDL_INIT_SENSOR;
-    */
-
-    public static int SDL_INIT_NOPARACHUTE = SDL_INIT_NOPARACHUTE();
-
-    private static native int SDL_INIT_NOPARACHUTE(); /*
-        return SDL_INIT_NOPARACHUTE;
-    */
-
-    public static int SDL_INIT_EVERYTHING = SDL_INIT_EVERYTHING();
-
-    private static native int SDL_INIT_EVERYTHING(); /*
-        return SDL_INIT_EVERYTHING;
-    */
+//    public static int SDL_INIT_VIDEO = SDL_INIT_VIDEO();
+//
+//    private static native int SDL_INIT_VIDEO(); /*
+//        return SDL_INIT_VIDEO;
+//    */
+//
+//    public static int SDL_INIT_JOYSTICK = SDL_INIT_JOYSTICK();
+//
+//    private static native int SDL_INIT_JOYSTICK(); /*
+//        return SDL_INIT_JOYSTICK;
+//    */
+//
+//    public static int SDL_INIT_HAPTIC = SDL_INIT_HAPTIC();
+//
+//    private static native int SDL_INIT_HAPTIC(); /*
+//        return SDL_INIT_HAPTIC;
+//    */
+//
+//    public static int SDL_INIT_GAMECONTROLLER = SDL_INIT_GAMECONTROLLER();
+//
+//    private static native int SDL_INIT_GAMECONTROLLER(); /*
+//        return SDL_INIT_GAMECONTROLLER;
+//    */
+//
+//    public static int SDL_INIT_EVENTS = SDL_INIT_EVENTS();
+//
+//    private static native int SDL_INIT_EVENTS(); /*
+//        return SDL_INIT_EVENTS;
+//    */
+//
+//    public static int SDL_INIT_SENSOR = SDL_INIT_SENSOR();
+//
+//    private static native int SDL_INIT_SENSOR(); /*
+//        return SDL_INIT_SENSOR;
+//    */
+//
+//    public static int SDL_INIT_NOPARACHUTE = SDL_INIT_NOPARACHUTE();
+//
+//    private static native int SDL_INIT_NOPARACHUTE(); /*
+//        return SDL_INIT_NOPARACHUTE;
+//    */
+//
+//    public static int SDL_INIT_EVERYTHING = SDL_INIT_EVERYTHING();
+//
+//    private static native int SDL_INIT_EVERYTHING(); /*
+//        return SDL_INIT_EVERYTHING;
+//    */
 
     public static native String SDL_GetError(); /*
         return env->NewStringUTF(SDL_GetError());
