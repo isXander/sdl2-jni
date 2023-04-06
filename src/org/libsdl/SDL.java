@@ -20,7 +20,7 @@ final public class SDL {
     */
 
 
-    public static native int SDL_JoystickCurrentPowerLevel(long ptr);/*
+    public static int SDL_JoystickCurrentPowerLevel(long ptr){return 0;};/*
             return SDL_JoystickCurrentPowerLevel((SDL_Joystick *) ptr);
     */
 
@@ -124,6 +124,26 @@ final public class SDL {
         return SDL_JoystickRumble((SDL_Joystick *)ptr, leftMagnitude, rightMagnitude,  duration_ms) == 0;
     */
 
+    public static native boolean SDL_JoystickHasRumble(long ptr); /*
+        return SDL_JoystickHasRumble((SDL_Joystick *)ptr);
+    */
+
+    public static native boolean SDL_JoystickRumbleTriggers(long ptr, int leftMagnitude, int rightMagnitude, int duration_ms); /*
+        return SDL_JoystickRumbleTriggers((SDL_Joystick *)ptr, leftMagnitude, rightMagnitude,  duration_ms) == 0;
+    */
+
+    public static native boolean SDL_JoystickHasRumbleTriggers(long ptr); /*
+        return SDL_JoystickHasRumbleTriggers((SDL_Joystick *)ptr);
+    */
+
+    public static native boolean SDL_JoystickHasLED(long ptr); /*
+        return SDL_JoystickHasLED((SDL_Joystick *)ptr);
+    */
+
+    public static native boolean SDL_JoystickSetLED(long ptr, byte r, byte g, byte b); /*
+        return SDL_JoystickSetLED((SDL_Joystick *)ptr, r, g, b) == 0;
+    */
+
     public static native String SDL_GameControllerGetStringForAxis(int axis); /*
         return  env->NewStringUTF(SDL_GameControllerGetStringForAxis((SDL_GameControllerAxis)axis));
     */
@@ -131,7 +151,6 @@ final public class SDL {
     public static native String SDL_GameControllerGetStringForButton(int button); /*
         return  env->NewStringUTF(SDL_GameControllerGetStringForButton((SDL_GameControllerButton)button));
     */
-
 
     // GameController.h
 

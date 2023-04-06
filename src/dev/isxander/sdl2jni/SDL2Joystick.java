@@ -24,16 +24,25 @@ public class SDL2Joystick implements Closeable {
     public PowerLevel getPowerLevel() {
         checkClosed();
 
-        return switch (SDL.SDL_JoystickCurrentPowerLevel(ptrJoystick)) {
-            case SDL.SDL_JOYSTICK_POWER_UNKNOWN -> PowerLevel.UNKNOWN;
-            case SDL.SDL_JOYSTICK_POWER_EMPTY -> PowerLevel.EMPTY;
-            case SDL.SDL_JOYSTICK_POWER_LOW -> PowerLevel.LOW;
-            case SDL.SDL_JOYSTICK_POWER_MEDIUM -> PowerLevel.MEDIUM;
-            case SDL.SDL_JOYSTICK_POWER_FULL -> PowerLevel.FULL;
-            case SDL.SDL_JOYSTICK_POWER_WIRED -> PowerLevel.WIRED;
-            case SDL.SDL_JOYSTICK_POWER_MAX -> PowerLevel.MAX;
-            default -> throw new IllegalStateException("Unknown power level");
-        };
+        switch (SDL.SDL_JoystickCurrentPowerLevel(ptrJoystick)) {
+            case SDL.SDL_JOYSTICK_POWER_UNKNOWN:
+                return PowerLevel.UNKNOWN;
+            case SDL.SDL_JOYSTICK_POWER_EMPTY:
+                return PowerLevel.EMPTY;
+            case SDL.SDL_JOYSTICK_POWER_LOW:
+                return PowerLevel.LOW;
+            case SDL.SDL_JOYSTICK_POWER_MEDIUM:
+                return PowerLevel.MEDIUM;
+            case SDL.SDL_JOYSTICK_POWER_FULL:
+                return PowerLevel.FULL;
+            case SDL.SDL_JOYSTICK_POWER_WIRED:
+                return PowerLevel.WIRED;
+            case SDL.SDL_JOYSTICK_POWER_MAX:
+                return PowerLevel.MAX;
+            default:
+                throw new IllegalStateException("Unknown power level");
+
+        }
     }
 
     private void checkClosed() {
