@@ -226,8 +226,15 @@ final public class SDL {
                 SDL_CONTROLLER_TYPE_XBOXONE = 2,
                 SDL_CONTROLLER_TYPE_PS3 = 3,
                 SDL_CONTROLLER_TYPE_PS4 = 4,
+                SDL_CONTROLLER_TYPE_PS5 = 7,
                 SDL_CONTROLLER_TYPE_NINTENDO_SWITCH_PRO = 5,
-                SDL_CONTROLLER_TYPE_VIRTUAL = 6;
+                SDL_CONTROLLER_TYPE_VIRTUAL = 6,
+                SDL_CONTROLLER_TYPE_AMAZON_LUNA = 8,
+                SDL_CONTROLLER_TYPE_GOOGLE_STADIA = 9,
+                SDL_CONTROLLER_TYPE_NVIDIA_SHIELD = 10,
+                SDL_CONTROLLER_TYPE_NINTENDO_SWITCH_JOYCON_LEFT = 11,
+                SDL_CONTROLLER_TYPE_NINTENDO_SWITCH_JOYCON_RIGHT = 12,
+                SDL_CONTROLLER_TYPE_NINTENDO_SWITCH_JOYCON_PAIR = 13;
 
 
     public static native int SDL_GameControllerAddMapping(String mappingString);/*
@@ -304,6 +311,10 @@ final public class SDL {
         return env->NewStringUTF(SDL_GameControllerNameForIndex(i));
     */
 
+    public static native String SDL_GameControllerPath(long ptr); /*
+        return env->NewStringUTF(SDL_GameControllerPath((SDL_GameController*) ptr));
+    */
+
     public static native long SDL_GameControllerFromPlayerIndex(int i); /*
          return (uintptr_t)SDL_GameControllerFromPlayerIndex(i);
     */
@@ -331,6 +342,53 @@ final public class SDL {
     public static native boolean SDL_IsGameController(int joystick_index); /*
         return (SDL_IsGameController(joystick_index)==SDL_TRUE);
     */
+
+    public static native boolean SDL_GameControllerRumble(long ptr, int low_frequency_rumble, int high_frequency_rumble, int duration_ms); /*
+        return SDL_GameControllerRumble((SDL_GameController*) ptr, low_frequency_rumble, high_frequency_rumble, duration_ms)==0;
+    */
+
+    public static native boolean SDL_GameControllerHasRumble(long ptr); /*
+        return SDL_GameControllerHasRumble((SDL_GameController*) ptr)==SDL_TRUE;
+    */
+
+    public static native boolean SDL_GameControllerRumbleTriggers(long ptr, int leftMagnitude, int rightMagnitude, int duration_ms); /*
+        return SDL_GameControllerRumbleTriggers((SDL_GameController*) ptr, leftMagnitude, rightMagnitude,  duration_ms) == 0;
+    */
+
+    public static native boolean SDL_GameControllerHasRumbleTriggers(long ptr); /*
+        return SDL_GameControllerHasRumbleTriggers((SDL_GameController*) ptr)==SDL_TRUE;
+    */
+
+    public static native int SDL_GameControllerSetSensorEnabled(long ptr, int sensor, boolean enabled); /*
+        return SDL_GameControllerSetSensorEnabled((SDL_GameController*) ptr, (SDL_SensorType) sensor, (SDL_bool) enabled);
+    */
+
+    public static native boolean SDL_GameControllerHasSensor(long ptr, int sensor); /*
+        return SDL_GameControllerHasSensor((SDL_GameController*) ptr, (SDL_SensorType) sensor);
+    */
+
+    public static native boolean SDL_GameControllerIsSensorEnabled(long ptr, int sensor); /*
+        return (SDL_GameControllerIsSensorEnabled((SDL_GameController*) ptr, (SDL_SensorType) sensor)==SDL_TRUE);
+    */
+
+    public static native float SDL_GameControllerGetSensorDataRate(long ptr, int sensor); /*
+        return SDL_GameControllerGetSensorDataRate((SDL_GameController*) ptr, (SDL_SensorType) sensor);
+    */
+
+    public static native int SDL_GameControllerGetSensorData(long ptr, int sensor, float[] data, int num_values); /*
+        return SDL_GameControllerGetSensorData((SDL_GameController*) ptr, (SDL_SensorType) sensor, data, num_values);
+    */
+
+    //// SDL_sensor.h
+
+    public static final int SDL_SENSOR_INVALID = -1,
+            SDL_SENSOR_UNKNOWN = 0,
+            SDL_SENSOR_ACCEL = 1,
+            SDL_SENSOR_GYRO = 2,
+            SDL_SENSOR_ACCEL_L = 3,
+            SDL_SENSOR_GYRO_L = 4,
+            SDL_SENSOR_ACCEL_R = 5,
+            SDL_SENSOR_GYRO_R = 6;
 
 
     ///// SDL.h

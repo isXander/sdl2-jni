@@ -1,6 +1,7 @@
 import com.badlogic.gdx.jnigen.*;
 import com.badlogic.gdx.jnigen.BuildTarget.TargetOs;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 
 class NativesBuild {
@@ -10,7 +11,7 @@ class NativesBuild {
     static final String minSDLversion="2.0.9";
     static final String macLibPath ="/usr/local/lib/libSDL2.a";
 
-	public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         //Deal with arguments
         boolean useSystemSDL = false;
         boolean buildWindows = false;
@@ -44,6 +45,18 @@ class NativesBuild {
         BuildTarget win32 = BuildTarget.newDefaultTarget(TargetOs.Windows, false);
         BuildTarget win64 = BuildTarget.newDefaultTarget(TargetOs.Windows, true);
         BuildTarget mac64 = BuildTarget.newDefaultTarget(TargetOs.MacOsX, true);
+
+        lin64.osFileName = "uncompressed/" + lin64.getTargetFolder();
+        win32.osFileName = "uncompressed/" + win32.getTargetFolder();
+        win64.osFileName = "uncompressed/" + win64.getTargetFolder();
+        mac64.osFileName = "uncompressed/" + mac64.getTargetFolder();
+
+        // match with maven artifact
+        lin64.libName = win32.libName = win64.libName = mac64.libName = "sdl2-jni-natives-";
+        lin64.libName += "linux64.so";
+        win32.libName += "win32.dll";
+        win64.libName += "win64.dll";
+        mac64.libName += "mac64.dylib";
 
         String sdl2Version = null;
 
@@ -91,7 +104,7 @@ class NativesBuild {
 
         //Generate native code, build scripts
         System.out.println("##### GENERATING NATIVE CODE AND BUILD SCRIPTS #####");
-        new NativeCodeGenerator().generate("src/org/libsdl", "build/classes/java/main", "jni");
+        new NativeCodeGenerator().generate("src", "build/classes/java/main/", "jni");
 
         if (!buildLinux && !buildOSX && !buildWindows) {
             System.out.println("No build targets specified, nothing to do.");
@@ -99,7 +112,7 @@ class NativesBuild {
         }
 
         new AntScriptGenerator().generate(
-                new BuildConfig("sdl2-jni", "build/tmp",  "libs/"+sdl2Version, "jni"), win32, win64, lin64, mac64
+                new BuildConfig("sdl2-jni", "build/tmp",  "libs", "jni"), win32, win64, lin64, mac64
         );
         System.out.println();
 
@@ -127,7 +140,7 @@ class NativesBuild {
 
         System.out.println("##### PACKING NATIVES INTO .JAR #####");
         BuildExecutor.executeAnt("jni/build.xml", "pack-natives");
-	}
+    }
 
     private static String checkSDLVersion(String command, String minVersion, String currentVersion) throws FileNotFoundException{
         String sdl = "0";
