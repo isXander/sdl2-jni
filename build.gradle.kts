@@ -115,11 +115,15 @@ val buildMacNatives by tasks.registering(JavaExec::class) {
     standardInput = System.`in`
 }
 
-val compressMacNatives by tasks.registering(UpxTask::class) {
-    group = "natives"
-
-    inputExecutable.set(file("libs/uncompressed/macosx64/sdl2-jni-natives-mac64.so"))
-    outputExecutable.set(file("libs/natives/macosx64/sdl2-jni-natives-mac64.so"))
+//val compressMacNatives by tasks.registering(UpxTask::class) {
+//    group = "natives"
+//
+//    inputExecutable.set(file("libs/uncompressed/macosx64/sdl2-jni-natives-mac64.so"))
+//    outputExecutable.set()
+//}
+val compressMacNatives by tasks.registering(Copy::class) {
+    from(file("libs/uncompressed/macosx64/sdl2-jni-natives-mac64.so"))
+    to(file("libs/natives/macosx64/"))
 }
 
 val allNatives by tasks.registering(JavaExec::class) {

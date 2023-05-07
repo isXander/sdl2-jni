@@ -8,6 +8,14 @@ jobs:
     runs-on: ubuntu-22.04
     name: Build Windows Natives
 
+    strategy:
+      fail-fast: false
+      matrix:
+        include: [
+          { target: x86_64-w64-mingw32 },
+          { target: i686-w64-mingw32 }
+        ]
+
     steps:
       - name: Get build dependencies
         run: |
@@ -21,17 +29,10 @@ jobs:
         run: |
           mv Makefile.minimal Makefile
           mkdir build
-      - name: Build SDL2 for win32
+      - name: Build SDL2
         working-directory: SDL/build
         run: |
-          ../configure --host=i686-w64-mingw32 --disable-audio --disable-render --disable-filesystem  --enable-hidapi
-          make -j 8
-          sudo make install
-      - name: Build SDL2 for win64
-        working-directory: SDL/build
-        run: |
-          cd .. && make clean && cd build
-          ../configure --host=x86_64-w64-mingw32 --disable-audio --disable-render --disable-filesystem  --enable-hidapi
+          ../configure --host=${{ matrix.target }} --disable-audio --disable-render --disable-filesystem  --enable-hidapi
           make -j 8
           sudo make install
       - name: Cleanup build
