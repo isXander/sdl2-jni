@@ -1,5 +1,6 @@
 import org.gradle.internal.os.OperatingSystem
 import org.jetbrains.gradle.plugins.upx.UpxTask
+import java.io.ByteArrayOutputStream
 
 plugins {
     `java-library`
@@ -51,9 +52,21 @@ val deleteJniFolder by tasks.registering(Delete::class) {
 tasks["clean"].dependsOn(deleteJniFolder)
 
 upx {
-    // plugin broken - won't unzip itself on unix
-    if (!OperatingSystem.current().isWindows) {
-        executableProvider.set(buildDir.resolve("upx/exec/upx"))
+    // plugin broken - won't unzip itself on unix so use system-provided upx
+    if (OperatingSystem.current().isUnix) {
+        executableProvider.convention(provider {
+            val stdout = ByteArrayOutputStream()
+            exec {
+                standardOutput = stdout
+                commandLine("whereis", "upx")
+            }
+            val upxPath = stdout.toString().lines()
+                .first { it.startsWith("upx: ") }
+                .removePrefix("upx: ")
+                .split(" ")
+                .first()
+            File(upxPath)
+        })
     }
 }
 
