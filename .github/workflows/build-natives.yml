@@ -20,6 +20,7 @@ jobs:
           pwd && ls
       - name: Prepare workspace
         run: |
+          ls && pwd
           mv Makefile.minimal Makefile
           mkdir build
           cd build
@@ -69,6 +70,7 @@ jobs:
           pwd && ls
       - name: Prepare workspace
         run: |
+          ls && pwd
           mv Makefile.minimal Makefile
           mkdir build
           cd build
@@ -115,6 +117,7 @@ jobs:
           pwd && ls
       - name: Prepare workspace
         run: |
+          ls && pwd
           mv Makefile.minimal Makefile
           mkdir build
           cd build
