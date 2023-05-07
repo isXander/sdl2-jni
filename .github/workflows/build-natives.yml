@@ -16,20 +16,19 @@ jobs:
       - name: Clone SDL2
         run: |
           git clone --depth 1 --branch release-2.26.5 https://github.com/libsdl-org/SDL.git
-          cd SDL
-          pwd && ls
       - name: Prepare workspace
+        working-directory: SDL
         run: |
-          ls && pwd
           mv Makefile.minimal Makefile
           mkdir build
-          cd build
       - name: Build SDL2 for win32
+        working-directory: SDL/build
         run: |
           ../configure --host=i686-w64-mingw32 --disable-audio --disable-render --disable-filesystem  --enable-hidapi
           make -j 8
           sudo make install
       - name: Build SDL2 for win64
+        working-directory: SDL/build
         run: |
           ../make clean
           ../configure --host=x86_64-w64-mingw32 --disable-audio --disable-render --disable-filesystem  --enable-hidapi
@@ -37,7 +36,6 @@ jobs:
           sudo make install
       - name: Cleanup build
         run: |
-          cd ../..
           rm -rf SDL
 
       - uses: actions/checkout@v3
@@ -66,22 +64,19 @@ jobs:
       - name: Clone SDL2
         run: |
           git clone --depth 1 --branch release-2.26.5 https://github.com/libsdl-org/SDL.git
-          cd SDL
-          pwd && ls
       - name: Prepare workspace
+        working-directory: SDL
         run: |
-          ls && pwd
           mv Makefile.minimal Makefile
           mkdir build
-          cd build
       - name: Build SDL2 for linux64
+        working-directory: SDL/build
         run: |
           ../configure --disable-audio --disable-render --disable-filesystem  --enable-hidapi
           make -j 8
           sudo make install
       - name: Cleanup build
         run: |
-          cd ../..
           rm -rf SDL
 
       - uses: actions/checkout@v3
@@ -113,22 +108,19 @@ jobs:
       - name: Clone SDL2
         run: |
           git clone --depth 1 --branch release-2.26.5 https://github.com/libsdl-org/SDL.git
-          cd SDL
-          pwd && ls
       - name: Prepare workspace
+        working-directory: SDL
         run: |
-          ls && pwd
           mv Makefile.minimal Makefile
           mkdir build
-          cd build
       - name: Build SDL2 for mac64
+        working-directory: SDL/build
         run: |
           ../configure --disable-audio --disable-render --disable-filesystem  --enable-hidapi
           make -j 8
           sudo make install
       - name: Cleanup build
         run: |
-          cd ../..
           rm -rf SDL
 
       - uses: actions/checkout@v3
