@@ -17,6 +17,7 @@ jobs:
         run: |
           git clone --depth 1 --branch release-2.26.5 https://github.com/libsdl-org/SDL.git
           cd SDL
+          pwd && ls
       - name: Prepare workspace
         run: |
           mv Makefile.minimal Makefile
@@ -65,6 +66,7 @@ jobs:
         run: |
           git clone --depth 1 --branch release-2.26.5 https://github.com/libsdl-org/SDL.git
           cd SDL
+          pwd && ls
       - name: Prepare workspace
         run: |
           mv Makefile.minimal Makefile
@@ -110,6 +112,7 @@ jobs:
         run: |
           git clone --depth 1 --branch release-2.26.5 https://github.com/libsdl-org/SDL.git
           cd SDL
+          pwd && ls
       - name: Prepare workspace
         run: |
           mv Makefile.minimal Makefile
