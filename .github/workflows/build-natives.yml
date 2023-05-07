@@ -30,7 +30,7 @@ jobs:
       - name: Build SDL2 for win64
         working-directory: SDL/build
         run: |
-          cd .. && make clean cd build
+          cd .. && make clean && cd build
           ../configure --host=x86_64-w64-mingw32 --disable-audio --disable-render --disable-filesystem  --enable-hidapi
           make -j 8
           sudo make install
@@ -98,15 +98,8 @@ jobs:
           path: libs/natives/**
 
   build-macos:
+    runs-on: macos-latest
     name: Build MacOS Natives
-
-    strategy:
-      matrix:
-        include: [
-          { os: macos-latest, host_arch: x86_64, macos_target: arm64-apple-macos12, target_arch: aarch64 }
-        ]
-
-    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Get build dependencies
@@ -120,10 +113,13 @@ jobs:
         with:
           xcode-version: latest
       - name: Build SDL2 for mac64
-        working-directory: SDL/XCode
+        working-directory: SDL/build
+        env:
+          CC: ../build-scripts/clang-fat.sh
         run: |
           ../configure --disable-audio --disable-render --disable-filesystem  --enable-hidapi
-          cc -target ${{ matrix.macos_target }}
+          make -j 8
+          sudo make install
       - name: Cleanup build
         run: |
           rm -rf SDL
