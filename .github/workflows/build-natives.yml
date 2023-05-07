@@ -108,10 +108,11 @@ jobs:
       - name: Clone SDL2
         run: |
           git clone --depth 1 --branch release-2.26.5 https://github.com/libsdl-org/SDL.git
-      - name: Set up XCode
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: latest
+      - name: Prepare workspace
+        working-directory: SDL
+        run: |
+          mv Makefile.minimal Makefile
+          mkdir build
       - name: Build SDL2 for mac64
         working-directory: SDL/build
         env:
