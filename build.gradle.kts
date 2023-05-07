@@ -81,10 +81,34 @@ val buildWindowsNatives by tasks.registering(JavaExec::class) {
     group = "natives"
 
     dependsOn(tasks["clean"], tasks["classes"])
-    //finalizedBy(compressWindowsX86Natives, compressWindowsX64Natives)
+    finalizedBy(compressWindowsX64Natives, compressWindowsX86Natives)
 
     mainClass.set("NativesBuild")
-    args = listOf("build-windows", "system-SDL2")
+    args = listOf("build-windows64", "build-windows32", "system-SDL2")
+    classpath = nativeBuildSourceset.runtimeClasspath
+    standardInput = System.`in`
+}
+
+val buildWindowsX64Natives by tasks.registering(JavaExec::class) {
+    group = "natives"
+
+    dependsOn(tasks["clean"], tasks["classes"])
+    finalizedBy(compressWindowsX64Natives)
+
+    mainClass.set("NativesBuild")
+    args = listOf("build-windows64", "system-SDL2")
+    classpath = nativeBuildSourceset.runtimeClasspath
+    standardInput = System.`in`
+}
+
+val buildWindowsX86Natives by tasks.registering(JavaExec::class) {
+    group = "natives"
+
+    dependsOn(tasks["clean"], tasks["classes"])
+    finalizedBy(compressWindowsX86Natives)
+
+    mainClass.set("NativesBuild")
+    args = listOf("build-windows32", "system-SDL2")
     classpath = nativeBuildSourceset.runtimeClasspath
     standardInput = System.`in`
 }
@@ -107,10 +131,34 @@ val buildMacNatives by tasks.registering(JavaExec::class) {
     group = "natives"
 
     dependsOn(tasks["clean"], tasks["classes"])
-    finalizedBy(compressMacNatives)
+    finalizedBy(compressMacArmNatives, compressMacIntelNatives)
 
     mainClass.set("NativesBuild")
-    args = listOf("build-OSX", "system-SDL2")
+    args = listOf("build-mac-x86_64", "build-mac-arm64", "system-SDL2")
+    classpath = nativeBuildSourceset.runtimeClasspath
+    standardInput = System.`in`
+}
+
+val buildMacIntelNatives by tasks.registering(JavaExec::class) {
+    group = "natives"
+
+    dependsOn(tasks["clean"], tasks["classes"])
+    finalizedBy(compressMacIntelNatives)
+
+    mainClass.set("NativesBuild")
+    args = listOf("build-mac-x86_64", "system-SDL2")
+    classpath = nativeBuildSourceset.runtimeClasspath
+    standardInput = System.`in`
+}
+
+val buildMacArmNatives by tasks.registering(JavaExec::class) {
+    group = "natives"
+
+    dependsOn(tasks["clean"], tasks["classes"])
+    finalizedBy(compressMacArmNatives)
+
+    mainClass.set("NativesBuild")
+    args = listOf("build-mac-arm64", "system-SDL2")
     classpath = nativeBuildSourceset.runtimeClasspath
     standardInput = System.`in`
 }
@@ -121,9 +169,13 @@ val buildMacNatives by tasks.registering(JavaExec::class) {
 //    inputExecutable.set(file("libs/uncompressed/macosx64/sdl2-jni-natives-mac64.so"))
 //    outputExecutable.set()
 //}
-val compressMacNatives by tasks.registering(Copy::class) {
-    from(file("libs/uncompressed/macosx64/sdl2-jni-natives-mac64.so"))
+val compressMacIntelNatives by tasks.registering(Copy::class) {
+    from(file("libs/uncompressed/macosx64/sdl2-jni-natives-mac64.dylib"))
     to(file("libs/natives/macosx64/"))
+}
+val compressMacArmNatives by tasks.registering(Copy::class) {
+    from(file("libs/uncompressed/macosxarm64/sdl2-jni-natives-macArm64.dylib"))
+    to(file("libs/natives/macosxarm64/"))
 }
 
 val allNatives by tasks.registering(JavaExec::class) {

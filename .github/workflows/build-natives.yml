@@ -12,8 +12,8 @@ jobs:
       fail-fast: false
       matrix:
         include: [
-          { target: x86_64-w64-mingw32 },
-          { target: i686-w64-mingw32 }
+          { target: x86_64-w64-mingw32, task: "buildWindowsX64Natives" },
+          { target: i686-w64-mingw32, task: "buildWindowsX64Natives" }
         ]
 
     steps:
@@ -47,7 +47,7 @@ jobs:
           distribution: temurin
       - name: Build & compress natives
         run: |
-          ./gradlew buildWindowsNatives compressWindowsX64Natives compressWindowsX86Natives
+          ./gradlew ${{ matrix.task }}
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -134,7 +134,7 @@ jobs:
           distribution: temurin
       - name: Build & compress natives
         run: |
-          ./gradlew buildMacNatives compressMacNatives
+          ./gradlew buildMacNatives
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
