@@ -170,12 +170,14 @@ val buildMacArmNatives by tasks.registering(JavaExec::class) {
 //    outputExecutable.set()
 //}
 val compressMacIntelNatives by tasks.registering(Copy::class) {
+    group = "natives"
+
     from(file("libs/uncompressed/macosx64/sdl2-jni-natives-mac64.dylib"))
-    to(file("libs/natives/macosx64/"))
+    into(file("libs/natives/macosx64/"))
 }
 val compressMacArmNatives by tasks.registering(Copy::class) {
     from(file("libs/uncompressed/macosxarm64/sdl2-jni-natives-macArm64.dylib"))
-    to(file("libs/natives/macosxarm64/"))
+    into(file("libs/natives/macosxarm64/"))
 }
 
 val allNatives by tasks.registering(JavaExec::class) {
