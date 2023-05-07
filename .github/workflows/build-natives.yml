@@ -1,0 +1,135 @@
+name: Build Natives
+
+on:
+  push:
+
+jobs:
+  build-windows:
+    runs-on: ubuntu-22.04
+    name: Build Windows Natives
+
+    steps:
+      - name: Get build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install ant mingw-w64 upx
+      - name: Clone SDL2
+        run: |
+          git clone --depth 1 --branch release-2.26.5 https://github.com/libsdl-org/SDL.git && cd SDL
+      - name: Prepare workspace
+        run: |
+          mv Makefile.minimal Makefile
+          mkdir build && cd build
+      - name: Build SDL2 for win32
+        run: |
+          ../configure --host=i686-w64-mingw32 --disable-audio --disable-render --disable-filesystem  --enable-hidapi
+          make -j 8
+          sudo make install
+      - name: Build SDL2 for win64
+        run: |
+          ../make clean
+          ../configure --host=x86_64-w64-mingw32 --disable-audio --disable-render --disable-filesystem  --enable-hidapi
+          make -j 8
+          sudo make install
+      - name: Cleanup build
+        run: |
+          cd ../..
+          rm -rf SDL
+
+      - uses: actions/checkout@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
+      - name: Build & compress natives
+        run: |
+          ./gradlew buildWindowsNatives compressWindowsX64Natives compressWindowsX86Natives
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: natives
+          path: libs/natives/**
+  build-linux:
+    runs-on: ubuntu-22.04
+    name: Build Linux Natives
+
+    steps:
+      - name: Get build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install ant build-essential sdl2-dev
+      - name: Clone SDL2
+        run: |
+          git clone --depth 1 --branch release-2.26.5 https://github.com/libsdl-org/SDL.git && cd SDL
+      - name: Prepare workspace
+        run: |
+          mv Makefile.minimal Makefile
+          mkdir build && cd build
+      - name: Build SDL2 for linux64
+        run: |
+          ../configure --disable-audio --disable-render --disable-filesystem  --enable-hidapi
+          make -j 8
+          sudo make install
+      - name: Cleanup build
+        run: |
+          cd ../..
+          rm -rf SDL
+
+      - uses: actions/checkout@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
+      - name: Build & compress natives
+        run: |
+          ./gradlew buildLinuxNatives
+      - name: Pretend to compress natives (broken)
+        run: |
+          mv libs/uncompressed/linux64 libs/natives/linux64
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: natives
+          path: libs/natives/**
+
+  build-macos:
+    runs-on: macos-latest
+    name: Build MacOS Natives
+
+    steps:
+      - name: Get build dependencies
+        run: |
+          brew install sdl2 ant
+      - name: Clone SDL2
+        run: |
+          git clone --depth 1 --branch release-2.26.5 https://github.com/libsdl-org/SDL.git && cd SDL
+      - name: Prepare workspace
+        run: |
+          mv Makefile.minimal Makefile
+          mkdir build && cd build
+      - name: Build SDL2 for mac64
+        run: |
+          ../configure --disable-audio --disable-render --disable-filesystem  --enable-hidapi
+          make -j 8
+          sudo make install
+      - name: Cleanup build
+        run: |
+          cd ../..
+          rm -rf SDL
+
+      - uses: actions/checkout@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
+      - name: Build & compress natives
+        run: |
+          ./gradlew buildMacNatives compressMacNatives
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: natives
+          path: libs/natives/**
