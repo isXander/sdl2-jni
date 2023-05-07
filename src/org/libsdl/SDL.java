@@ -20,7 +20,7 @@ final public class SDL {
     */
 
 
-    public static int SDL_JoystickCurrentPowerLevel(long ptr){return 0;};/*
+    public static native int SDL_JoystickCurrentPowerLevel(long ptr);/*
             return SDL_JoystickCurrentPowerLevel((SDL_Joystick *) ptr);
     */
 
