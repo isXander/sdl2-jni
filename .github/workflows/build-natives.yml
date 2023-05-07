@@ -13,7 +13,7 @@ jobs:
       matrix:
         include: [
           { target: x86_64-w64-mingw32, task: "buildWindowsX64Natives" },
-          { target: i686-w64-mingw32, task: "buildWindowsX64Natives" }
+          { target: i686-w64-mingw32, task: "buildWindowsX86Natives" }
         ]
 
     steps:
@@ -47,6 +47,7 @@ jobs:
           distribution: temurin
       - name: Build & compress natives
         run: |
+          mkdir -p ./build/upx/exec && cp /usr/bin/upx ./build/upx/exec/
           ./gradlew ${{ matrix.task }}
       - name: Upload artifacts
         uses: actions/upload-artifact@v2

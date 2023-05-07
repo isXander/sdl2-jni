@@ -176,7 +176,7 @@ val compressMacIntelNatives by tasks.registering(Copy::class) {
     into(file("libs/natives/macosx64/"))
 }
 val compressMacArmNatives by tasks.registering(Copy::class) {
-    from(file("libs/uncompressed/macosxarm64/sdl2-jni-natives-macArm64.dylib"))
+    from(file("libs/uncompressed/macosxarm64/sdl2-jni-natives-mac-arm64.dylib"))
     into(file("libs/natives/macosxarm64/"))
 }
 

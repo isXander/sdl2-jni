@@ -52,12 +52,12 @@ class NativesBuild {
         macArm64.osFileName = "uncompressed/" + macArm64.getTargetFolder();
 
         // match with maven artifact
-        lin64.libName = win32.libName = win64.libName = mac64.libName = "sdl2-jni-natives-";
+        lin64.libName = win32.libName = win64.libName = mac64.libName = macArm64.libName = "sdl2-jni-natives-";
         lin64.libName += "linux64.so";
         win32.libName += "win32.dll";
         win64.libName += "win64.dll";
         mac64.libName += "mac64.dylib";
-        macArm64.libName += "macArm64.dylib";
+        macArm64.libName += "mac-arm64.dylib";
 
         String sdl2Version = null;
 
