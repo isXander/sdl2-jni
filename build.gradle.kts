@@ -9,7 +9,8 @@ plugins {
 }
 
 group = "dev.isxander"
-version = "2.26.4-5"
+version = "2.26.5-" + (System.getenv("GITHUB_RUN_NUMBER") ?: "local")
+
 
 repositories {
     mavenCentral()

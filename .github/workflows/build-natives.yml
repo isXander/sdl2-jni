@@ -50,7 +50,7 @@ jobs:
           mkdir -p ./build/upx/exec && cp /usr/bin/upx ./build/upx/exec/
           ./gradlew ${{ matrix.task }}
       - name: Upload artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: natives
           path: libs/natives/**
@@ -94,7 +94,7 @@ jobs:
         run: |
           mv libs/uncompressed/linux64 libs/natives/linux64
       - name: Upload artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: natives
           path: libs/natives/**
@@ -137,7 +137,31 @@ jobs:
         run: |
           ./gradlew buildMacNatives
       - name: Upload artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: natives
           path: libs/natives/**
+
+  publish:
+    runs-on: ubuntu-latest
+    name: Publish Library
+    needs: [build-windows, build-linux, build-macos]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download built natives
+        uses: actions/download-artifact@v3
+        with:
+          name: natives
+          path: libs/natives
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
+      - name: Publish to Maven
+        run: |
+          ./gradlew publishAllPublicationsToXanderReleasesRepository
+        env:
+          XANDER_MAVEN_USER: xander
+          XANDER_MAVEN_PASS: ${{ secrets.XANDER_MAVEN_PASS }}
