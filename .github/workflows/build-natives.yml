@@ -17,13 +17,18 @@ jobs:
         ]
 
     steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
+      - name: Clone SDL2
+        run: ./gradlew cloneSDLRepo
       - name: Get build dependencies
         run: |
           sudo apt-get update
           sudo apt-get install ant mingw-w64 upx
-      - name: Clone SDL2
-        run: |
-          git clone --depth 1 --branch release-2.26.5 https://github.com/libsdl-org/SDL.git
       - name: Prepare workspace
         working-directory: SDL
         run: |
@@ -35,20 +40,8 @@ jobs:
           ../configure --host=${{ matrix.target }} --disable-audio --disable-render --disable-filesystem  --enable-hidapi
           make -j 8
           sudo make install
-      - name: Cleanup build
-        run: |
-          rm -rf SDL
-
-      - uses: actions/checkout@v3
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          java-version: 17
-          distribution: temurin
       - name: Build & compress natives
-        run: |
-          mkdir -p ./build/upx/exec && cp /usr/bin/upx ./build/upx/exec/
-          ./gradlew ${{ matrix.task }}
+        run: ./gradlew ${{ matrix.task }}
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -59,13 +52,18 @@ jobs:
     name: Build Linux Natives
 
     steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
+      - name: Clone SDL2
+        run: ./gradlew cloneSDLRepo
       - name: Get build dependencies
         run: |
           sudo apt-get update
           sudo apt-get install ant build-essential
-      - name: Clone SDL2
-        run: |
-          git clone --depth 1 --branch release-2.26.5 https://github.com/libsdl-org/SDL.git
       - name: Prepare workspace
         working-directory: SDL
         run: |
@@ -80,13 +78,6 @@ jobs:
       - name: Cleanup build
         run: |
           rm -rf SDL
-
-      - uses: actions/checkout@v3
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          java-version: 17
-          distribution: temurin
       - name: Build & compress natives
         run: |
           ./gradlew buildLinuxNatives
@@ -104,12 +95,17 @@ jobs:
     name: Build MacOS Natives
 
     steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
+      - name: Clone SDL2
+        run: ./gradlew cloneSDLRepo
       - name: Get build dependencies
         run: |
           brew install ant
-      - name: Clone SDL2
-        run: |
-          git clone --depth 1 --branch release-2.26.5 https://github.com/libsdl-org/SDL.git
       - name: Prepare workspace
         working-directory: SDL
         run: |
@@ -124,15 +120,8 @@ jobs:
           make -j 8
           sudo make install
       - name: Cleanup build
-        run: |
-          rm -rf SDL
+        run: rm -rf SDL
 
-      - uses: actions/checkout@v3
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          java-version: 17
-          distribution: temurin
       - name: Build & compress natives
         run: |
           ./gradlew buildMacNatives
@@ -161,7 +150,12 @@ jobs:
           distribution: temurin
       - name: Publish to Maven
         run: |
-          ./gradlew publishAllPublicationsToXanderReleasesRepository
+          ./gradlew build publishAllPublicationsToXanderReleasesRepository
         env:
           XANDER_MAVEN_USER: xander
           XANDER_MAVEN_PASS: ${{ secrets.XANDER_MAVEN_PASS }}
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: java-library
+          path: build/libs/*.jar

@@ -8,8 +8,10 @@ plugins {
     id("org.jetbrains.gradle.upx") version "1.6.0-RC.5"
 }
 
+val sdlVersion = "2.26.5"
+
 group = "dev.isxander"
-version = "2.26.5-" + (System.getenv("GITHUB_RUN_NUMBER") ?: "local")
+version = sdlVersion + "-" + (System.getenv("GITHUB_RUN_NUMBER") ?: "local")
 
 
 repositories {
@@ -43,6 +45,12 @@ val nativeBuildSourceset by sourceSets.creating {
 
 dependencies {
     implementation("com.badlogicgames.gdx:gdx-jnigen:2.3.1")
+}
+
+val cloneSDLRepo by tasks.registering(Exec::class) {
+    group = "natives"
+
+    commandLine("git", "clone", "--depth", "1", "--branch", "release-$sdlVersion", "https://github.com/libsdl-org/SDL.git", "SDL")
 }
 
 val deleteJniFolder by tasks.registering(Delete::class) {
