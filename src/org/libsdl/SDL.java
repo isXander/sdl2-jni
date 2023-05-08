@@ -152,12 +152,16 @@ final public class SDL {
         return  env->NewStringUTF(SDL_GameControllerGetStringForButton((SDL_GameControllerButton)button));
     */
 
-    public static native int SDL_JoystickGetDeviceVendor(int device_id); /*
-        return SDL_JoystickGetDeviceVendor(device_id);
+    public static native int SDL_JoystickGetDeviceVendor(int device_index); /*
+        return SDL_JoystickGetDeviceVendor(device_index);
     */
 
-    public static native int SDL_JoystickGetDeviceProduct(int device_id); /*
-        return SDL_JoystickGetDeviceProduct(device_id);
+    public static native int SDL_JoystickGetDeviceProduct(int device_index); /*
+        return SDL_JoystickGetDeviceProduct(device_index);
+    */
+
+    public static native String SDL_JoystickPathForIndex(int device_index); /*
+        return env->NewStringUTF(SDL_JoystickNameForIndex(device_index));
     */
 
     // GameController.h
@@ -529,6 +533,92 @@ final public class SDL {
 //    public static native int SDL_PollEventResult(); /*
 //        return event
 //    */
+
+    public static native long SDL_hid_open(int vendor_id, int product_id, String serial_number); /*
+        return (jlong) SDL_hid_open(vendor_id, product_id, serial_number);
+    */
+
+    /**
+     * Write an Output report to a HID device.
+     *
+     * The first byte of `data` must contain the Report ID. For devices which only
+     * support a single report, this must be set to 0x0. The remaining bytes
+     * contain the report data. Since the Report ID is mandatory, calls to
+     * SDL_hid_write() will always contain one more byte than the report contains.
+     * For example, if a hid report is 16 bytes long, 17 bytes must be passed to
+     * SDL_hid_write(), the Report ID (or 0x0, for devices with a single report),
+     * followed by the report data (16 bytes). In this example, the length passed
+     * in would be 17.
+     *
+     * SDL_hid_write() will send the data on the first OUT endpoint, if one
+     * exists. If it does not, it will send the data through the Control Endpoint
+     * (Endpoint 0).
+     *
+     * @param ptr A device handle returned from SDL_hid_open().
+     * @param data The data to send, including the report number as the first
+     *             byte.
+     * @param size The length in bytes of the data to send.
+     * @return the actual number of bytes written and -1 on error.
+     *
+     * @since This function is available since SDL 2.0.18.
+     */
+    public static native int SDL_hid_write(long ptr, byte[] data, int size); /*
+        return SDL_hid_write((SDL_hid_device*) ptr, data, size);
+    */
+
+    /**
+     * Read an Input report from a HID device.
+     *
+     * Input reports are returned to the host through the INTERRUPT IN endpoint.
+     * The first byte will contain the Report number if the device uses numbered
+     * reports.
+     *
+     * @param ptr A device handle returned from SDL_hid_open().
+     * @param data A buffer to put the read data into.
+     * @param size The number of bytes to read. For devices with multiple
+     *               reports, make sure to read an extra byte for the report
+     *               number.
+     * @return the actual number of bytes read and -1 on error. If no packet was
+     *          available to be read and the handle is in non-blocking mode, this
+     *          function returns 0.
+     *
+     * @since This function is available since SDL 2.0.18.
+     */
+    public static native int SDL_hid_read(long ptr, byte[] data, int size); /*
+        return SDL_hid_read((SDL_hid_device*) ptr, data, size);
+    */
+
+    public static native int SDL_hid_set_nonblocking(long ptr, boolean nonblock); /*
+        return SDL_hid_set_nonblocking((SDL_hid_device*) ptr, (SDL_bool) nonblock);
+    */
+
+    public static native int SDL_hid_send_feature_report(long ptr, byte[] data, int size); /*
+        return SDL_hid_send_feature_report((SDL_hid_device*) ptr, data, size);
+    */
+
+    public static native int SDL_hid_get_feature_report(long ptr, byte[] data, int size); /*
+        return SDL_hid_get_feature_report((SDL_hid_device*) ptr, data, size);
+    */
+
+    public static native void SDL_hid_close(long ptr); /*
+        SDL_hid_close((SDL_hid_device*) ptr);
+    */
+
+    public record HidDeviceInfo(
+            String path,
+            int vendor_id,
+            int product_id,
+            String serial_number,
+            int release_number,
+            String manufacturer_string,
+            String product_string,
+            int usage_page,
+            int usage,
+            int interface_number,
+            int interface_class,
+            int interface_subclass,
+            int interface_protocol
+    ) { }
 
     public static class Event{
          public static int SDL_JOYDEVICEADDED=0x605;
