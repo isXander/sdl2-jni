@@ -243,10 +243,11 @@ publishing {
 
         create<MavenPublication>("natives") {
             val nativesPaths = project.files(
-                    "libs/natives/windows32",
-                    "libs/natives/windows64",
-                    "libs/natives/linux64",
-                    "libs/natives/macosx64",
+                "libs/natives/windows32",
+                "libs/natives/windows64",
+                "libs/natives/linux64",
+                "libs/natives/macosx64",
+                "libs/natives/macosxarm64",
             )
             for (nativeFolder in nativesPaths) {
                 if (!nativeFolder.exists())
