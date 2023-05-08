@@ -13,7 +13,6 @@ val sdlVersion = "2.26.5"
 group = "dev.isxander"
 version = sdlVersion + "-" + (System.getenv("GITHUB_RUN_NUMBER") ?: "local")
 
-
 repositories {
     mavenCentral()
 }

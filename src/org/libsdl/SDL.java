@@ -152,6 +152,14 @@ final public class SDL {
         return  env->NewStringUTF(SDL_GameControllerGetStringForButton((SDL_GameControllerButton)button));
     */
 
+    public static native int SDL_JoystickGetDeviceVendor(int device_id); /*
+        return SDL_JoystickGetDeviceVendor(device_id);
+    */
+
+    public static native int SDL_JoystickGetDeviceProduct(int device_id); /*
+        return SDL_JoystickGetDeviceProduct(device_id);
+    */
+
     // GameController.h
 
     public static final int SDL_CONTROLLER_BINDTYPE_NONE = 0,
