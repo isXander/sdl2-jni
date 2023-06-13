@@ -546,10 +546,15 @@ final public class SDL {
         if (!serial_number) {
             return (jlong) SDL_hid_open((unsigned short) vendor_id, (unsigned short) product_id, NULL);
         }
-        const jchar* nativeSerialNumber = env->GetStringChars(serial_number, NULL);
-        long result = SDL_hid_open((unsigned short) vendor_id, (unsigned short) product_id, nativeSerialNumber);
-        env->ReleaseStringChars(serial_number, nativeSerialNumber);
-        return (jlong) result;
+
+        // Convert Java String to std::wstring
+        std::wstring value;
+        const jchar *raw = env->GetStringChars(serial_number, 0);
+        jsize len = env->GetStringLength(serial_number);
+        value.assign(raw, raw + len);
+        env->ReleaseStringChars(serial_number, raw);
+
+        return (jlong) SDL_hid_open((unsigned short) vendor_id, (unsigned short) product_id, nativeSerialNumber);
     */
 
     /**
@@ -578,7 +583,7 @@ final public class SDL {
      */
     public static native int SDL_hid_write(long ptr, byte[] data, int size); /*
         jbyte* nativeData = env->GetByteArrayElements(data, NULL);
-        int result = SDL_hid_write((SDL_hid_device*) ptr, nativeData, size);
+        int result = SDL_hid_write((SDL_hid_device*) ptr, (unsigned char*)nativeData, size);
         env->ReleaseByteArrayElements(data, nativeData, JNI_ABORT);
         return (jint) result;
     */
@@ -603,7 +608,7 @@ final public class SDL {
      */
     public static native int SDL_hid_read(long ptr, byte[] data, int size); /*
         jbyte* nativeData = env->GetByteArrayElements(data, NULL);
-        int result = SDL_hid_read((SDL_hid_device*) ptr, nativeData, size);
+        int result = SDL_hid_read((SDL_hid_device*) ptr, (unsigned char*)nativeData, size);
         env->ReleaseByteArrayElements(data, nativeData, JNI_ABORT);
         return (jint) result;
     */
@@ -614,14 +619,14 @@ final public class SDL {
 
     public static native int SDL_hid_send_feature_report(long ptr, byte[] data, int size); /*
         jbyte* nativeData = env->GetByteArrayElements(data, NULL);
-        int result = SDL_hid_send_feature_report((SDL_hid_device*) ptr, nativeData, size);
+        int result = SDL_hid_send_feature_report((SDL_hid_device*) ptr, (unsigned char*)nativeData, size);
         env->ReleaseByteArrayElements(data, nativeData, JNI_ABORT);
         return (jint) result;
     */
 
     public static native int SDL_hid_get_feature_report(long ptr, byte[] data, int size); /*
         jbyte* nativeData = env->GetByteArrayElements(data, NULL);
-        int result = SDL_hid_get_feature_report((SDL_hid_device*) ptr, nativeData, size);
+        int result = SDL_hid_get_feature_report((SDL_hid_device*) ptr,(unsigned char*) nativeData, size);
         env->ReleaseByteArrayElements(data, nativeData, JNI_ABORT);
         return (jint) result;
     */
