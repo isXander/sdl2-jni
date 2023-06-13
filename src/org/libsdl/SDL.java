@@ -544,11 +544,11 @@ final public class SDL {
 
     public static native long SDL_hid_open(int vendor_id, int product_id, String serial_number); /*
         if (!serial_number) {
-            return (jlong) SDL_hid_open(vendor_id, product_id, NULL);
+            return (jlong) SDL_hid_open((unsigned short) vendor_id, (unsigned short) product_id, NULL);
         }
         const jchar* nativeSerialNumber = env->GetStringChars(serial_number, NULL);
-        long result = SDL_hid_open(vendor_id, product_id, nativeSerialNumber);
-        ReleaseStringChars(env, serial_number, nativeSerialNumber);
+        long result = SDL_hid_open((unsigned short) vendor_id, (unsigned short) product_id, nativeSerialNumber);
+        env->ReleaseStringChars(serial_number, nativeSerialNumber);
         return (jlong) result;
     */
 
@@ -577,10 +577,10 @@ final public class SDL {
      * @since This function is available since SDL 2.0.18.
      */
     public static native int SDL_hid_write(long ptr, byte[] data, int size); /*
-        jbyte* bufferPtr = env->GetByteArrayElements(data, NULL);
-        int result = SDL_hid_write((SDL_hid_device*) ptr, bufferPtr, size);
-        env->ReleaseByteArrayElements(data, bufferPtr, 0);
-        return result;
+        jbyte* nativeData = env->GetByteArrayElements(data, NULL);
+        int result = SDL_hid_write((SDL_hid_device*) ptr, nativeData, size);
+        env->ReleaseByteArrayElements(data, nativeData, JNI_ABORT);
+        return (jint) result;
     */
 
     /**
@@ -602,10 +602,10 @@ final public class SDL {
      * @since This function is available since SDL 2.0.18.
      */
     public static native int SDL_hid_read(long ptr, byte[] data, int size); /*
-        jbyte* bufferPtr = env->GetByteArrayElements(data, NULL);
-        int result = SDL_hid_read((SDL_hid_device*) ptr, bufferPtr, size);
-        env->ReleaseByteArrayElements(data, bufferPtr, 0);
-        return result;
+        jbyte* nativeData = env->GetByteArrayElements(data, NULL);
+        int result = SDL_hid_read((SDL_hid_device*) ptr, nativeData, size);
+        env->ReleaseByteArrayElements(data, nativeData, JNI_ABORT);
+        return (jint) result;
     */
 
     public static native int SDL_hid_set_nonblocking(long ptr, boolean nonblock); /*
@@ -613,17 +613,17 @@ final public class SDL {
     */
 
     public static native int SDL_hid_send_feature_report(long ptr, byte[] data, int size); /*
-        jbyte* bufferPtr = env->GetByteArrayElements(data, NULL);
-        int result = SDL_hid_send_feature_report((SDL_hid_device*) ptr, bufferPtr, size);
-        env->ReleaseByteArrayElements(data, bufferPtr, 0);
-        return result;
+        jbyte* nativeData = env->GetByteArrayElements(data, NULL);
+        int result = SDL_hid_send_feature_report((SDL_hid_device*) ptr, nativeData, size);
+        env->ReleaseByteArrayElements(data, nativeData, JNI_ABORT);
+        return (jint) result;
     */
 
     public static native int SDL_hid_get_feature_report(long ptr, byte[] data, int size); /*
-        jbyte* bufferPtr = env->GetByteArrayElements(data, NULL);
-        int result = SDL_hid_get_feature_report((SDL_hid_device*) ptr, bufferPtr, size);
-        env->ReleaseByteArrayElements(data, bufferPtr, 0);
-        return result;
+        jbyte* nativeData = env->GetByteArrayElements(data, NULL);
+        int result = SDL_hid_get_feature_report((SDL_hid_device*) ptr, nativeData, size);
+        env->ReleaseByteArrayElements(data, nativeData, JNI_ABORT);
+        return (jint) result;
     */
 
     public static native void SDL_hid_close(long ptr); /*
