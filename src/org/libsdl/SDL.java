@@ -547,6 +547,8 @@ final public class SDL {
             return (jlong) SDL_hid_open((unsigned short) vendor_id, (unsigned short) product_id, NULL);
         }
 
+        #include <string>
+
         // Convert Java String to std::wstring
         std::wstring value;
         const jchar *raw = env->GetStringChars(serial_number, 0);
