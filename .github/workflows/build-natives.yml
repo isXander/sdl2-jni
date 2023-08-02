@@ -52,6 +52,10 @@ jobs:
     name: Build Linux Natives
 
     steps:
+      - name: Remove existing SDL2
+        run: |
+          sudo apt-get -y remove --purge libsdl2-dev
+          sudo apt-get -y remove --purge libsdl2-2.0-0
       - uses: actions/checkout@v3
       - name: Set up JDK
         uses: actions/setup-java@v3
