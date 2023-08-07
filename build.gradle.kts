@@ -8,7 +8,7 @@ plugins {
     id("org.jetbrains.gradle.upx") version "1.6.0-RC.5"
 }
 
-val sdlVersion = "2.26.5"
+val sdlVersion = "2.28.2"
 
 group = "dev.isxander"
 version = sdlVersion + "-" + (System.getenv("GITHUB_RUN_NUMBER") ?: "local")
